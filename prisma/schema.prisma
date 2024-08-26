@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Agency {
+  id        String   @id @default(cuid())
+  address   String
+  city      String
+  country   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  clients   Client[]
+
+  @@map("agencies")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      String   @default("manager")
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Client {
+  id            String    @id @default(cuid())
+  firstname     String
+  lastname      String
+  birthDate     DateTime
+  cardNumber    String
+  deliveratedAt DateTime
+  phone         String
+  address       String
+  city          String
+  country       String
+  email         String?
+  job           String
+  agentName     String
+  agentPhone    String
+  agencyId      String
+  agency        Agency    @relation(fields: [agencyId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+
+  @@map("clients")
+}
+
+model Account {
+  id            String        @id @default(cuid())
+  accountNumber String
+  status        String
+  balance       Float
+  clientId      String
+  type          String
+  categoryId    String
+  category      Category      @relation(fields: [categoryId], references: [id])
+  client        Client        @relation(fields: [clientId], references: [id])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  transactions  Transaction[]
+
+  @@map("accounts")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  accounts    Account[]
+
+  @@map("categories")
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAW
+  PAYMENT
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+  amount      Float
+  type        TransactionType
+  description String
+  accountId   String
+  account     Account         @relation(fields: [accountId], references: [id])
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@map("transactions")
+}
+
+model Notification {
+  id  String @id @default(cuid())
+  
+}

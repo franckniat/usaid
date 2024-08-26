@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base{
+    .sidebar{
+        width: 250px;
+        transition: width ease-out 200ms;
+
+        &.active{
+            width: 80px;
+
+            .logo{
+                font-size: 15px;
+                display: none;
+            }
+
+            .sideText{
+                display: none;
+            }
+
+            .sidelink{
+                width: fit-content;
+            }
+        }
+    
+        .sidelink{
+            position: relative;
+    
+            &.active::after{
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                height: 30px;
+                width: 5px;
+                @apply bg-primary;
+                @apply rounded-md;
+            }
+        }
+    }
+    .hamburger{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        span{
+            width: 50%;
+            margin: 0 5px;
+            height: 1px;
+            position: absolute;
+            transition: transform ease-out 200ms;
+            &:nth-child(1){
+                transform: translateY(-5px);
+                transition: transform ease-out 200ms;
+            }
+            &:nth-child(2){
+                transition: opacity ease-out 150ms;
+            }
+            &:nth-child(3){
+                transform: translateY(5px);
+                transition: transform ease-out 200ms;
+            }
+            @apply bg-foreground/70;
+        }
+        &.active{
+            span{
+                &:nth-child(1){
+                    transform:translate(0px) rotate(135deg)
+                }
+                &:nth-child(2){
+                    opacity: 0;
+                }
+                &:nth-child(3){
+                    transform: translate(0px) rotate(-135deg)
+                }
+            }
+        }
+    }
+    .dashboard_children{
+        margin-left: 280px;
+        transition: all ease-out 200ms;
+
+        &.active{
+            margin-left: 100px;
+        }
+    }
+    .header{
+        width: calc(100% - 250px);
+        right: 0;
+        transition: width ease-out 200ms;
+
+        &.active{
+            width: calc(100% - 80px);
+        }
+    }
+}
+
